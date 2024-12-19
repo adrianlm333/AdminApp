@@ -27,28 +27,13 @@ namespace FrontEndWPF
             InitializeComponent();
 
             BtnConsultar.Click += async (s, e) => { await BtnConsultar_Click(s, e); };
-            dataGrid1.MouseDoubleClick += async (s, e) => { await DataGrid_MouseDoubleClick(s, e); };
+            dataGrid1.MouseDoubleClick += DataGrid_MouseDoubleClick;
         }
 
-        private async Task DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = (Persona)dataGrid1.SelectedItem;
-            this.NavigationService.Navigate(new Uri("DetallePersona.xaml", UriKind.Relative));
-
-            //string apiUrl = "https://localhost:7164/api/Directorio/" + element.identificacion;
-            //using (HttpClient client = new HttpClient())
-            //{
-            //    HttpResponseMessage response = await client.GetAsync(apiUrl);
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        var personasCollection = await response.Content.ReadFromJsonAsync<Persona>();
-
-            //        if (personasCollection != null)
-            //        {
-            //            dataGrid1.ItemsSource = LstPersonas;
-            //        }
-            //    }
-            //}
+            this.NavigationService.Navigate(new DetallePersona(element.identificacion), UriKind.Relative);
         }
 
         internal List<Persona> LstPersonas { get; set; }
