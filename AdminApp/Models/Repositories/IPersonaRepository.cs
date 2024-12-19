@@ -8,6 +8,6 @@
         Task<int> DeleteByIdAsync(int id);
         Task<Persona> AddAsync(Persona persona);
         Task<int> UpdateAsync(Persona persona);
-
+        Task<int> DeleteByIdentificacionAsync(string identificacion);
     }
 }

@@ -1,12 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Reflection;
-using System.Security.Policy;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,17 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using FrontEndWPF.Models;
 
 namespace FrontEndWPF
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Lógica de interacción para DetallePersona.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DetallePersona : Page
     {
-        public MainWindow()
-        {            
+        public DetallePersona()
+        {
             InitializeComponent();
         }
     }
