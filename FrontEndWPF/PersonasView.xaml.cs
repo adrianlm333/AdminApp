@@ -76,7 +76,7 @@ namespace FrontEndWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show("API no disponible, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("No existen datos para mostrar, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -43,33 +43,40 @@ namespace FrontEndWPF
         {
             if (!string.IsNullOrEmpty(_paramPersonaId))
             {
-                using (HttpClient client = new HttpClient())
+                try
                 {
-                    HttpResponseMessage response = await client.GetAsync(ApiUrl + ApiDirectorio + _paramPersonaId);
-                    if (response.IsSuccessStatusCode)
+                    using (HttpClient client = new HttpClient())
                     {
-                        var strResponse = await response.Content.ReadAsStringAsync();
-                        if (!string.IsNullOrEmpty(strResponse))
+                        HttpResponseMessage response = await client.GetAsync(ApiUrl + ApiDirectorio + _paramPersonaId);
+                        if (response.IsSuccessStatusCode)
                         {
-                            var itemPersonas = await response.Content.ReadFromJsonAsync<IEnumerable<Persona>>();
-
-                            if (itemPersonas != null)
+                            var strResponse = await response.Content.ReadAsStringAsync();
+                            if (!string.IsNullOrEmpty(strResponse))
                             {
-                                txtNombre.Text = itemPersonas.First().nombre;
-                                txtApPaterno.Text = itemPersonas.First().apellido_paterno;
-                                txtApMaterno.Text = itemPersonas.First().apellido_materno;
-                                txtClaveIde.Text = itemPersonas.First().identificacion;
-                                txtClaveIde.IsReadOnly = true;
-                                btnAddFact.Visibility = Visibility.Visible;
-                                btnEliminarPersona.Visibility = Visibility.Visible;
-                                grFactPersona.Visibility = Visibility.Visible;
-                                objPersona = itemPersonas.First();
-                                await GetFacturasPersona(itemPersonas.First().id);
+                                var itemPersonas = await response.Content.ReadFromJsonAsync<IEnumerable<Persona>>();
+
+                                if (itemPersonas != null)
+                                {
+                                    txtNombre.Text = itemPersonas.First().nombre;
+                                    txtApPaterno.Text = itemPersonas.First().apellido_paterno;
+                                    txtApMaterno.Text = itemPersonas.First().apellido_materno;
+                                    txtClaveIde.Text = itemPersonas.First().identificacion;
+                                    txtClaveIde.IsReadOnly = true;
+                                    btnAddFact.Visibility = Visibility.Visible;
+                                    btnEliminarPersona.Visibility = Visibility.Visible;
+                                    grFactPersona.Visibility = Visibility.Visible;
+                                    objPersona = itemPersonas.First();
+                                    await GetFacturasPersona(itemPersonas.First().id);
+                                }
                             }
                         }
                     }
                 }
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No existen datos para mostrar, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+        }
             else
             {
                 txtNombre.Text = "";
@@ -132,46 +139,53 @@ namespace FrontEndWPF
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    using (HttpClient client = new HttpClient())
-                    {
-                        int intId = 0;
-                        if(objPersona != null)
-                            intId = objPersona.id;
-
-                        using StringContent jsonContent = new(
-                            JsonSerializer.Serialize(new
-                            {
-                                id = intId,
-                                nombre = txtNombre.Text,
-                                apellido_paterno = txtApPaterno.Text,
-                                apellido_materno = txtApMaterno.Text,
-                                identificacion = txtClaveIde.Text,
-                            }),
-                            Encoding.UTF8,
-                            "application/json");
-                        HttpResponseMessage response;
-                        if (string.IsNullOrEmpty(_paramPersonaId)){
-                            response = await client.PutAsync(ApiUrl + ApiDirectorio, jsonContent);
-                        }
-                        else
+                    try
+                    {                    
+                        using (HttpClient client = new HttpClient())
                         {
-                            response = await client.PostAsync(ApiUrl + ApiDirectorio, jsonContent);
-                        }
+                            int intId = 0;
+                            if(objPersona != null)
+                                intId = objPersona.id;
 
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var strResponse = await response.Content.ReadAsStringAsync();
-                            if (!string.IsNullOrEmpty(strResponse))
-                            {
-                                var personaResult = await response.Content.ReadFromJsonAsync<Persona>();
-
-                                if (personaResult != null)
+                            using StringContent jsonContent = new(
+                                JsonSerializer.Serialize(new
                                 {
-                                    MessageBox.Show("Se guardó correctamente", caption, MessageBoxButton.OK, MessageBoxImage.Information);
-                                }
+                                    id = intId,
+                                    nombre = txtNombre.Text,
+                                    apellido_paterno = txtApPaterno.Text,
+                                    apellido_materno = txtApMaterno.Text,
+                                    identificacion = txtClaveIde.Text,
+                                }),
+                                Encoding.UTF8,
+                                "application/json");
+                            HttpResponseMessage response;
+                            if (string.IsNullOrEmpty(_paramPersonaId)){
+                                response = await client.PutAsync(ApiUrl + ApiDirectorio, jsonContent);
+                            }
+                            else
+                            {
+                                response = await client.PostAsync(ApiUrl + ApiDirectorio, jsonContent);
                             }
 
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var strResponse = await response.Content.ReadAsStringAsync();
+                                if (!string.IsNullOrEmpty(strResponse))
+                                {
+                                    var personaResult = await response.Content.ReadFromJsonAsync<Persona>();
+
+                                    if (personaResult != null)
+                                    {
+                                        MessageBox.Show("Se guardó correctamente", caption, MessageBoxButton.OK, MessageBoxImage.Information);
+                                    }
+                                }
+
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("No existen datos para mostrar, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -179,23 +193,32 @@ namespace FrontEndWPF
 
         private async Task GetFacturasPersona(int idPersona)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await client.GetAsync(ApiUrl + ApiFacturacion + "?idPersona=" + idPersona);
-                if (response.IsSuccessStatusCode)
+
+
+                using (HttpClient client = new HttpClient())
                 {
-                    var strResponse = await response.Content.ReadAsStringAsync();
-                    if (!string.IsNullOrEmpty(strResponse))
+                    HttpResponseMessage response = await client.GetAsync(ApiUrl + ApiFacturacion + "?idPersona=" + idPersona);
+                    if (response.IsSuccessStatusCode)
                     {
-                        var itemFacturas = await response.Content.ReadFromJsonAsync<IEnumerable<Factura>>();
-
-                        if (itemFacturas != null)
+                        var strResponse = await response.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(strResponse))
                         {
-                            grFactPersona.ItemsSource = itemFacturas;
-                        }
-                    }
+                            var itemFacturas = await response.Content.ReadFromJsonAsync<IEnumerable<Factura>>();
 
+                            if (itemFacturas != null)
+                            {
+                                grFactPersona.ItemsSource = itemFacturas;
+                            }
+                        }
+
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No existen datos para mostrar, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -213,30 +236,40 @@ namespace FrontEndWPF
             {
                 string messageBoxText = "La persona y sus facturas fueron eliminadas";
                 string caption = "Eliminar";
-                using (HttpClient client = new HttpClient())
+
+                try
                 {
-                    HttpResponseMessage response = await client.DeleteAsync(ApiUrl + ApiDirectorio + "?identificacion=" + objPersona.identificacion);
-                    if (response.IsSuccessStatusCode)
+
+
+                    using (HttpClient client = new HttpClient())
                     {
-                        var strResponse = await response.Content.ReadAsStringAsync();
-                        if (!string.IsNullOrEmpty(strResponse))
+                        HttpResponseMessage response = await client.DeleteAsync(ApiUrl + ApiDirectorio + "?identificacion=" + objPersona.identificacion);
+                        if (response.IsSuccessStatusCode)
                         {
-                            bool itemFacturas = await response.Content.ReadFromJsonAsync<bool>();
+                            var strResponse = await response.Content.ReadAsStringAsync();
+                            if (!string.IsNullOrEmpty(strResponse))
+                            {
+                                bool itemFacturas = await response.Content.ReadFromJsonAsync<bool>();
 
-                            if (itemFacturas)
-                            {
-                                MessageBox.Show(messageBoxText, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                                this.NavigationService.Navigate(new PersonasView(), UriKind.Relative);
+                                if (itemFacturas)
+                                {
+                                    MessageBox.Show(messageBoxText, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                                    this.NavigationService.Navigate(new PersonasView(), UriKind.Relative);
+                                }
+                                else
+                                {
+                                    messageBoxText = "No se pudo borrar, valide que los datos esten correctos";
+                                    caption = "Eliminar";
+                                    MessageBox.Show(messageBoxText, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                                }
                             }
-                            else
-                            {
-                                messageBoxText = "No se pudo borrar, valide que los datos esten correctos";
-                                caption = "Eliminar";
-                                MessageBox.Show(messageBoxText, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                            }
+
                         }
-
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No existen datos para mostrar, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

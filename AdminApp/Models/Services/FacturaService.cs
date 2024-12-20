@@ -1,4 +1,5 @@
 ﻿using AdminApp.Models.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminApp.Models.Services
 {
@@ -11,13 +12,31 @@ namespace AdminApp.Models.Services
         }
         public async Task<Factura> CreateAsync(Factura factura)
         {
-            int resultAdd = await _facturaRepository.AddAsync(factura);
-            if (resultAdd > 0)
+            try
             {
+
+
+                int resultAdd = await _facturaRepository.AddAsync(factura);
+                if (resultAdd > 0)
+                {
+                    return factura;
+                }
+
+                factura.id = 0;
                 return factura;
             }
-
-            factura.id = 0;
+            catch (DbUpdateException dbException)
+            {
+                Console.WriteLine(dbException.Message);
+            }
+            catch (OperationCanceledException operationException)
+            {
+                Console.WriteLine(operationException.Message);
+            }
+            catch (Exception exeption)
+            {
+                Console.WriteLine(exeption.Message);
+            }
             return factura;
         }
 
@@ -38,12 +57,28 @@ namespace AdminApp.Models.Services
 
         public async Task<Factura> SetAsync(Factura factura)
         {
-            int updResult = await _facturaRepository.UpdateAsync(factura);
-            if (updResult > 0)
+            try
             {
+                int updResult = await _facturaRepository.UpdateAsync(factura);
+                if (updResult > 0)
+                {
+                    return factura;
+                }
+                factura.id = 0;
                 return factura;
             }
-            factura.id = 0;
+            catch (DbUpdateException dbException)
+            {
+                Console.WriteLine(dbException.Message);
+            }
+            catch (OperationCanceledException operationException)
+            {
+                Console.WriteLine(operationException.Message);
+            }
+            catch (Exception exeption)
+            {
+                Console.WriteLine(exeption.Message);
+            }
             return factura;
         }
     }

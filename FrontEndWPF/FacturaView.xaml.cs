@@ -89,37 +89,44 @@ namespace FrontEndWPF
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        using (HttpClient client = new HttpClient())
+                        try
                         {
-
-                            using StringContent jsonContent = new(
-                                JsonSerializer.Serialize(new
-                                {
-                                    id = 0,
-                                    fecha = vDate,
-                                    monto = vMonto,
-                                    idpersona = _idPersona
-                                }),
-                                Encoding.UTF8,
-                                "application/json");
-                            HttpResponseMessage response;
-                            response = await client.PutAsync(ApiUrl + ApiFacturacion, jsonContent);
-                            
-
-                            if (response.IsSuccessStatusCode)
+                            using (HttpClient client = new HttpClient())
                             {
-                                var strResponse = await response.Content.ReadAsStringAsync();
-                                if (!string.IsNullOrEmpty(strResponse))
-                                {
-                                    var personaResult = await response.Content.ReadFromJsonAsync<Factura>();
 
-                                    if (personaResult != null)
+                                using StringContent jsonContent = new(
+                                    JsonSerializer.Serialize(new
                                     {
-                                        MessageBox.Show("Se guardó correctamente", caption, MessageBoxButton.OK, MessageBoxImage.Information);
-                                    }
-                                }
+                                        id = 0,
+                                        fecha = vDate,
+                                        monto = vMonto,
+                                        idpersona = _idPersona
+                                    }),
+                                    Encoding.UTF8,
+                                    "application/json");
+                                HttpResponseMessage response;
+                                response = await client.PutAsync(ApiUrl + ApiFacturacion, jsonContent);
 
+
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    var strResponse = await response.Content.ReadAsStringAsync();
+                                    if (!string.IsNullOrEmpty(strResponse))
+                                    {
+                                        var personaResult = await response.Content.ReadFromJsonAsync<Factura>();
+
+                                        if (personaResult != null)
+                                        {
+                                            MessageBox.Show("Se guardó correctamente", caption, MessageBoxButton.OK, MessageBoxImage.Information);
+                                        }
+                                    }
+
+                                }
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("No existen datos para mostrar, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                 }
