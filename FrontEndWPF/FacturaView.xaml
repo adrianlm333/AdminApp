@@ -5,24 +5,27 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FrontEndWPF"
       mc:Ignorable="d" 
-      d:DesignHeight="150" d:DesignWidth="400"
+      d:DesignHeight="170" d:DesignWidth="300"
       Title="FacturaView">
 
-    <Grid Background="White">
+    <Grid Background="White" Width="300">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="38"/>
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Margin="5" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left">Fecha</Label>
-        <DatePicker Grid.Column="0" Grid.Row="1" SelectedDateFormat="Long"
+        <Button Grid.Column="0" Grid.Row="0" Width="100" HorizontalAlignment="Left" x:Name="btnRegresar" Click="btnRegresar_Click">Regresar</Button>
+        <Button Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Right" x:Name="btnGuardar">Guardar</Button>
+        <Label Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Margin="5" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left">Fecha</Label>
+        <DatePicker Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2" SelectedDateFormat="Short"
                   FirstDayOfWeek="Monday" x:Name="inpFecha"/>
-        <Label Grid.Column="0" Grid.Row="2" Margin="5" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left">Monto</Label>
-
-        <TextBox TextWrapping="Wrap" Text=""  Grid.Column="0" Grid.Row="3" Margin="7" x:Name="inpMonto"/>
+        <Label Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Margin="5" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left">Monto</Label>
+        <TextBox Grid.ColumnSpan="2" TextWrapping="Wrap" Text=""  Grid.Column="0" Grid.Row="4" Margin="7" x:Name="inpMonto"  PreviewTextInput="inpMonto_PreviewTextInput" />
     </Grid>
 </Page>

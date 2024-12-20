@@ -24,10 +24,16 @@ namespace FrontEndWPF
     {
         public PersonasView()
         {
+            this.Loaded += async (s, e) => { await Page_Loaded(s, e); };
             InitializeComponent();
 
             BtnConsultar.Click += async (s, e) => { await BtnConsultar_Click(s, e); };
             dataGrid1.MouseDoubleClick += DataGrid_MouseDoubleClick;
+        }
+
+        private async Task Page_Loaded(object s, RoutedEventArgs e)
+        {
+            await GetPersonas("");
         }
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -40,9 +46,19 @@ namespace FrontEndWPF
 
         private async Task BtnConsultar_Click(object sender, RoutedEventArgs e)
         {
+            await GetPersonas(txtIdentificacion.Text);
+        }
+
+        private void BtnNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new DetallePersonaView(""), UriKind.Relative);
+        }
+
+        private async Task GetPersonas(string pFilter)
+        {
             try
             {
-                string apiUrl = "https://localhost:7164/api/Directorio/";
+                string apiUrl = "https://localhost:7164/api/Directorio/" + pFilter;
                 using (HttpClient client = new HttpClient())
                 {
                     HttpResponseMessage response = await client.GetAsync(apiUrl);
@@ -60,13 +76,8 @@ namespace FrontEndWPF
             }
             catch (Exception ex)
             {
-                throw;
+                MessageBox.Show("API no disponible, intente mas tarde", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void BtnNuevo_Click(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new DetallePersonaView(""), UriKind.Relative);
         }
     }
 }

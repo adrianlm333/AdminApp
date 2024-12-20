@@ -51,22 +51,22 @@ namespace FrontEndWPF
                         var strResponse = await response.Content.ReadAsStringAsync();
                         if (!string.IsNullOrEmpty(strResponse))
                         {
-                            var itemPersonas = await response.Content.ReadFromJsonAsync<Persona>();
+                            var itemPersonas = await response.Content.ReadFromJsonAsync<IEnumerable<Persona>>();
 
                             if (itemPersonas != null)
                             {
-                                txtNombre.Text = itemPersonas.nombre;
-                                txtApPaterno.Text = itemPersonas.apellido_paterno;
-                                txtApMaterno.Text = itemPersonas.apellido_materno;
-                                txtClaveIde.Text = itemPersonas.identificacion;
+                                txtNombre.Text = itemPersonas.First().nombre;
+                                txtApPaterno.Text = itemPersonas.First().apellido_paterno;
+                                txtApMaterno.Text = itemPersonas.First().apellido_materno;
+                                txtClaveIde.Text = itemPersonas.First().identificacion;
                                 txtClaveIde.IsReadOnly = true;
                                 btnAddFact.Visibility = Visibility.Visible;
                                 btnEliminarPersona.Visibility = Visibility.Visible;
-                                objPersona = itemPersonas;
-                                await GetFacturasPersona(itemPersonas.id);
+                                grFactPersona.Visibility = Visibility.Visible;
+                                objPersona = itemPersonas.First();
+                                await GetFacturasPersona(itemPersonas.First().id);
                             }
                         }
-
                     }
                 }
             }
@@ -80,6 +80,7 @@ namespace FrontEndWPF
                 grFactPersona.ItemsSource = new List<Factura>();
                 btnAddFact.Visibility = Visibility.Hidden;
                 btnEliminarPersona.Visibility = Visibility.Hidden;
+                grFactPersona.Visibility = Visibility.Hidden;
             }
         }
 
@@ -105,17 +106,17 @@ namespace FrontEndWPF
 
             if (string.IsNullOrEmpty(vNombre))
             {
-                MessageBox.Show("Capture el nombre", "Word Processor", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Capture el nombre", "Persona", MessageBoxButton.OK, MessageBoxImage.Error);
                 continueSave = false;
             }
             if (string.IsNullOrEmpty(vApPaterno))
             {
-                MessageBox.Show("Capture el apellido paterno", "Word Processor", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Capture el apellido paterno", "Persona", MessageBoxButton.OK, MessageBoxImage.Error);
                 continueSave = false;
             }
             if (string.IsNullOrEmpty(vClaveId))
             {
-                MessageBox.Show("Capture el apellido materno", "Word Processor", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Capture el apellido materno", "Persona", MessageBoxButton.OK, MessageBoxImage.Error);
                 continueSave = false;
             }
 
@@ -238,6 +239,19 @@ namespace FrontEndWPF
                     }
                 }
             }
+        }
+
+        private void btnAddFact_Click(object sender, RoutedEventArgs e)
+        {
+            if(objPersona != null)
+            {
+                this.NavigationService.Navigate(new FacturaView(objPersona.id, _paramPersonaId), UriKind.Relative);
+            }            
+        }
+
+        private void btnRegresarPrincipal_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new PersonasView(), UriKind.Relative);
         }
     }
 }

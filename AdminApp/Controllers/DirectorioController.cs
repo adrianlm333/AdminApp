@@ -37,7 +37,7 @@ namespace AdminApp.Controllers
         
         [HttpGet("{identificacion}")]
         [ActionName(nameof(GetPersona))]
-        public ActionResult<Persona> GetPersona(string identificacion)
+        public ActionResult<IEnumerable<Persona>> GetPersona(string identificacion)
         {
             return Ok(_directorioService.GetByIdentificacion(identificacion));
         }

@@ -73,9 +73,12 @@ namespace AdminApp.Models.Services
             return _personaRepository.FindById(id);
         }
 
-        public Persona GetByIdentificacion(string identificacion)
+        public IEnumerable<Persona> GetByIdentificacion(string identificacion)
         {
-            return _personaRepository.FindByIdentificacion(identificacion);
+            List<Persona> lstPersonas = new List<Persona>();
+            Persona persona = _personaRepository.FindByIdentificacion(identificacion);
+            lstPersonas.Add(persona);
+            return lstPersonas;
         }
 
         public async Task<bool> RemovePersonaAndFacturaAsync(string identificacion)

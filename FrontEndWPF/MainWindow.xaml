@@ -6,5 +6,5 @@
         xmlns:local="clr-namespace:FrontEndWPF"
         mc:Ignorable="d"
         Title="Inicio" Height="450" Width="800">
-    <Frame x:Name="framePrincipal" Source="PersonasView.xaml"/>
+    <Frame x:Name="framePrincipal" Source="PersonasView.xaml" NavigationUIVisibility="Hidden"/>
 </Window>
