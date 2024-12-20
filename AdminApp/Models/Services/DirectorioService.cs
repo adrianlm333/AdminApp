@@ -78,34 +78,34 @@ namespace AdminApp.Models.Services
             return _personaRepository.FindByIdentificacion(identificacion);
         }
 
-        public async Task<Persona> RemovePersonaAndFacturaAsync(Persona persona)
+        public async Task<bool> RemovePersonaAndFacturaAsync(string identificacion)
         {
             try
             {
-                int actionRemove = await _personaRepository.DeleteByIdentificacionAsync(persona.identificacion);
+                int actionRemove = await _personaRepository.DeleteByIdentificacionAsync(identificacion);
                 if (actionRemove > 0)
                 {
-                    await _facturaRepository.DeleteByPersonaAsync(persona.id);
+                    return true;
                 }
-                return persona;
+                return false;
             }
             catch (DbUpdateException dbException)
             {
                 Console.WriteLine(dbException.Message);
 
-                return persona;
+                return false;
             }
             catch (OperationCanceledException operationException)
             {
                 Console.WriteLine(operationException.Message);
 
-                return persona;
+                return false;
             }
             catch (Exception exeption)
             {
                 Console.WriteLine(exeption.Message);
 
-                return persona;
+                return false;
             }
         }
 

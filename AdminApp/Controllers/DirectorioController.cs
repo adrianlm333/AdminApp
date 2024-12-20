@@ -30,9 +30,9 @@ namespace AdminApp.Controllers
             return Ok(await _directorioService.SetAsync(persona));
         }
         [HttpDelete]
-        public async Task<ActionResult<Persona>> DeletePersona(Persona persona)
+        public async Task<ActionResult<Persona>> DeletePersona(string identificacion)
         {
-            return Ok(await _directorioService.RemovePersonaAndFacturaAsync(persona));
+            return Ok(await _directorioService.RemovePersonaAndFacturaAsync(identificacion));
         }
         
         [HttpGet("{identificacion}")]

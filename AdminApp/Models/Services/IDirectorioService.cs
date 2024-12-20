@@ -5,7 +5,7 @@
         IEnumerable<Persona> GetAll();
         Persona GetById(int id);
         Persona GetByIdentificacion(string identificacion);
-        Task<Persona> RemovePersonaAndFacturaAsync(Persona persona);
+        Task<bool> RemovePersonaAndFacturaAsync(string id);
         Task<Persona> CreateAsync(Persona persona);
         Task<Persona> SetAsync(Persona persona);
     }

@@ -20,9 +20,9 @@ namespace FrontEndWPF
     /// <summary>
     /// Lógica de interacción para Personas.xaml
     /// </summary>
-    public partial class Personas : Page
+    public partial class PersonasView : Page
     {
-        public Personas()
+        public PersonasView()
         {
             InitializeComponent();
 
@@ -33,7 +33,7 @@ namespace FrontEndWPF
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var element = (Persona)dataGrid1.SelectedItem;
-            this.NavigationService.Navigate(new DetallePersona(element.identificacion), UriKind.Relative);
+            this.NavigationService.Navigate(new DetallePersonaView(element.identificacion), UriKind.Relative);
         }
 
         internal List<Persona> LstPersonas { get; set; }
@@ -62,6 +62,11 @@ namespace FrontEndWPF
             {
                 throw;
             }
+        }
+
+        private void BtnNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new DetallePersonaView(""), UriKind.Relative);
         }
     }
 }

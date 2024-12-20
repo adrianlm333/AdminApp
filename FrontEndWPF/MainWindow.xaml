@@ -5,6 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FrontEndWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Frame x:Name="framePrincipal" Source="Personas.xaml"/>
+        Title="Inicio" Height="450" Width="800">
+    <Frame x:Name="framePrincipal" Source="PersonasView.xaml"/>
 </Window>
